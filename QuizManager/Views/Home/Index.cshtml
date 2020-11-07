@@ -1,0 +1,36 @@
+﻿@using QuizManager.Models.ViewModels
+@using QuizManager.Models.Permission;
+
+@model IndexViewModel
+@{
+
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    @if (Model.UserPermission == Permissions.Edit)
+    {
+        <div class="row">
+            <a href="@Url.Action("Create", "Home")">
+                <div class="card editBtn">
+                    <img src="/img/create.png" height="75" width="75" />
+                </div>
+            </a>
+        </div>
+    }
+    @foreach (var quiz in @Model.Quizzes)
+    {
+        <div class="row m-3">
+            <div class="col-md-6">
+                <a href="@Url.Action("Details", "Home", new { Id = quiz.Id })" style="text-decoration: none; color: black">
+                    <div class="card p-3">
+                        <h3>@quiz.Name</h3>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 p-3">
+                <h3>@quiz.Questions.Count() Questions</h3>
+            </div>
+        </div>
+    }
+</div>

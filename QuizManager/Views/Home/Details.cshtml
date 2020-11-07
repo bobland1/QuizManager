@@ -1,0 +1,59 @@
+﻿@using QuizManager.Models.ViewModels
+@using QuizManager.Models.Permission;
+
+@model DetailsViewModel
+@{
+
+    ViewData["Title"] = "Details Page";
+}
+
+<div class="text-center">
+    <h1>@Model.QuizName</h1>
+    @if (Model.UserPermission == Permissions.Edit)
+    {
+        <div class="row">
+            <a href="@Url.Action("Edit", "Home", new { Id = Model.QuizId })">
+                <div class="card editBtn">
+                    <img src="/img/edit.png" height="75" width="75" />
+                </div>
+            </a>
+        </div>
+    }
+    @{ 
+        string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    }
+    @foreach (var (question, index) in Model.Questions.Select((value, i) => (value, i)))
+    {
+        <div class="row mx-auto m-3">
+            <div class="row w-100 mx-auto mb-2">
+                <h2 class="w-10 p-3">@(index+1)</h2>
+                <div class="w-90 card p-3">
+                    <h3>@question.Text</h3>
+                </div>
+            </div>
+            @if (Model.UserPermission != Permissions.Restricted)
+            {
+                @foreach (var (answer, index2) in question.Answers.Select((value, i) => (value, i)))
+                {
+                    <h4 class="w-10 p-4">@alphabet[index2]</h4>
+                    if (answer.IsCorrect)
+                    {
+                        <div class="row w-40 m-2 mx-auto">
+                            <div class="card w-100 p-3" style="background-color: darkgray">
+                                <h3>@answer.Text</h3>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row w-40 m-2 mx-auto">
+                            <div class="card w-100 p-3">
+                                <h3>@answer.Text</h3>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+        </div>
+    }
+</div>
